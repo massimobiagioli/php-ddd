@@ -1,0 +1,40 @@
+version: "3.5"
+
+services:
+  php:
+    build:
+      context: ./docker/php
+    working_dir: /usr/share/nginx/app
+    environment:
+      XDEBUG_CONFIG: remote_host=docker.for.mac.localhost remote_port=9001 remote_enable=1
+      PHP_IDE_CONFIG: serverName=web
+    networks:
+      - app
+    volumes:
+      - ./app/:/usr/share/nginx/app
+
+  web:
+    image: nginx:1.15
+    working_dir: /usr/share/nginx/app
+    networks:
+      - app
+    ports:
+      - "8000:80"
+    volumes:
+      - ./app/:/usr/share/nginx/app
+      - ./docker/web/conf/default.conf:/etc/nginx/conf.d/default.conf
+
+  composer:
+    image: composer
+    volumes:
+      - ./app:/app
+
+  cs-fixer:
+    build:
+      context: ./docker/cs-fixer
+    volumes:
+      - ./app:/project
+
+networks:
+  app:
+    driver: bridge
