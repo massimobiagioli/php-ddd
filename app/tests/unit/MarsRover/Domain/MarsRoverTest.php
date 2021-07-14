@@ -4,14 +4,26 @@ declare(strict_types=1);
 
 namespace App\MarsRover\Domain;
 
-use PHPUnit\Framework\TestCase;
+use App\MarsRover\Application\Command\CreateMarsRover;
+use App\MarsRover\Domain\Event\MarsRoverWasCreated;
 
-class MarsRoverTest extends TestCase
+class MarsRoverTest extends MarsRoverCommandHandlerTest
 {
-    public function test_it_creates_new_mars_rover(): void
+    /**
+     * @test
+     */
+    public function it_creates_a_mars_rover(): void
     {
-        $marsRover = new MarsRover();
+        $id = new MarsRoverId('00000000-0000-0000-0000-000000000000');
+        $name = 'Dummy';
+        $position = Position::create(1, 1);
+        $orientation = Orientation::north();
 
-        self::assertNotNull($marsRover);
+        $this->scenario
+            ->given([])
+            ->when(new CreateMarsRover($id, $name, $position, $orientation))
+            ->then([
+                new MarsRoverWasCreated($id, $name, $position, $orientation),
+            ]);
     }
 }
