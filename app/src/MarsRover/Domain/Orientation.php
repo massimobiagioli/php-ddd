@@ -8,10 +8,10 @@ use Assert\Assertion as Assert;
 
 final class Orientation
 {
-    private const NORTH = 'N';
-    private const SOUTH = 'S';
-    private const EAST = 'E';
-    private const WEST = 'W';
+    public const NORTH = 'N';
+    public const SOUTH = 'S';
+    public const EAST = 'E';
+    public const WEST = 'W';
 
     private string $value;
 

@@ -29,6 +29,24 @@ final class Position implements Serializable
         return new self($x, $y);
     }
 
+    public function applyXOffset(int $offset): void
+    {
+        if ($offset > 0) {
+            $this->x = ($this->x < self::MAX_X) ? $this->x + $offset : self::MAX_X;
+        } elseif ($offset < 0) {
+            $this->x = ($this->x > 0) ? $this->x - $offset : 0;
+        }
+    }
+
+    public function applyYOffset(int $offset): void
+    {
+        if ($offset > 0) {
+            $this->y = ($this->y < self::MAX_Y) ? $this->y + $offset : self::MAX_Y;
+        } elseif ($offset < 0) {
+            $this->y = ($this->y > 0) ? $this->y - $offset : 0;
+        }
+    }
+
     public static function deserialize(array $data): self
     {
         return self::create((int) $data['x'], (int) $data['y']);
