@@ -41,4 +41,18 @@ class MarsRoverCommandHandler extends SimpleCommandHandler
         $marsRover->moveBackward();
         $this->repository->save($marsRover);
     }
+
+    public function handleTurnRightMarsRover(TurnRightMarsRover $command): void
+    {
+        $marsRover = $this->repository->load($command->getId());
+        $marsRover->turnRight();
+        $this->repository->save($marsRover);
+    }
+
+    public function handleTurnLeftMarsRover(TurnLeftMarsRover $command): void
+    {
+        $marsRover = $this->repository->load($command->getId());
+        $marsRover->turnLeft();
+        $this->repository->save($marsRover);
+    }
 }

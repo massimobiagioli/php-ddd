@@ -7,6 +7,8 @@ namespace App\MarsRover\Domain;
 use App\MarsRover\Domain\Event\MarsRoverWasCreated;
 use App\MarsRover\Domain\Event\MarsRoverWasMovedBackward;
 use App\MarsRover\Domain\Event\MarsRoverWasMovedForward;
+use App\MarsRover\Domain\Event\MarsRoverWasTurnedLeft;
+use App\MarsRover\Domain\Event\MarsRoverWasTurnedRight;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 
 class MarsRover extends EventSourcedAggregateRoot
@@ -79,6 +81,54 @@ class MarsRover extends EventSourcedAggregateRoot
         );
     }
 
+    public function turnRight(): void
+    {
+        $newOrientation = Orientation::north();
+
+        switch ($this->orientation) {
+            case Orientation::NORTH:
+                $newOrientation = Orientation::east();
+                break;
+            case Orientation::SOUTH:
+                $newOrientation = Orientation::west();
+                break;
+            case Orientation::EAST:
+                $newOrientation = Orientation::south();
+                break;
+            case Orientation::WEST:
+                $newOrientation = Orientation::north();
+                break;
+        }
+
+        $this->apply(
+            new MarsRoverWasTurnedRight($this->id, $newOrientation)
+        );
+    }
+
+    public function turnLeft(): void
+    {
+        $newOrientation = Orientation::north();
+
+        switch ($this->orientation) {
+            case Orientation::NORTH:
+                $newOrientation = Orientation::west();
+                break;
+            case Orientation::SOUTH:
+                $newOrientation = Orientation::east();
+                break;
+            case Orientation::EAST:
+                $newOrientation = Orientation::north();
+                break;
+            case Orientation::WEST:
+                $newOrientation = Orientation::south();
+                break;
+        }
+
+        $this->apply(
+            new MarsRoverWasTurnedLeft($this->id, $newOrientation)
+        );
+    }
+
     protected function applyMarsRoverWasCreated(MarsRoverWasCreated $event): void
     {
         $this->id = $event->getId();
@@ -97,7 +147,17 @@ class MarsRover extends EventSourcedAggregateRoot
         $this->changePosition($event->getXOffset(), $event->getYOffset());
     }
 
-    private function changePosition($xOffset, $yOffset)
+    protected function applyMarsRoverWasTurnedRight(MarsRoverWasTurnedRight $event): void
+    {
+        $this->orientation = $event->getNewOrientation();
+    }
+
+    protected function applyMarsRoverWasTurnedLeft(MarsRoverWasTurnedLeft $event): void
+    {
+        $this->orientation = $event->getNewOrientation();
+    }
+
+    private function changePosition($xOffset, $yOffset): void
     {
         $this->position->applyXOffset($xOffset);
         $this->position->applyYOffset($yOffset);

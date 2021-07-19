@@ -31,7 +31,7 @@ final class MarsRoverWasMovedForward
         return [
             'id' => (string) $this->getId(),
             'xOffset' => $this->xOffset,
-            'yOffset' => $this->yOffset
+            'yOffset' => $this->yOffset,
         ];
     }
 

@@ -7,9 +7,13 @@ namespace App\MarsRover\Domain;
 use App\MarsRover\Application\Command\CreateMarsRover;
 use App\MarsRover\Application\Command\MoveBackwardMarsRover;
 use App\MarsRover\Application\Command\MoveForwardMarsRover;
+use App\MarsRover\Application\Command\TurnLeftMarsRover;
+use App\MarsRover\Application\Command\TurnRightMarsRover;
 use App\MarsRover\Domain\Event\MarsRoverWasCreated;
 use App\MarsRover\Domain\Event\MarsRoverWasMovedBackward;
 use App\MarsRover\Domain\Event\MarsRoverWasMovedForward;
+use App\MarsRover\Domain\Event\MarsRoverWasTurnedLeft;
+use App\MarsRover\Domain\Event\MarsRoverWasTurnedRight;
 
 class MarsRoverTest extends MarsRoverCommandHandlerTest
 {
@@ -66,6 +70,44 @@ class MarsRoverTest extends MarsRoverCommandHandlerTest
             ->when(new MoveBackwardMarsRover($id))
             ->then([
                 new MarsRoverWasMovedBackward($id, 0, -1),
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_turns_right_a_mars_rover_when_orientation_is_north(): void
+    {
+        $id = new MarsRoverId('00000000-0000-0000-0000-000000000000');
+        $name = 'Dummy';
+        $position = Position::create(1, 1);
+        $orientation = Orientation::north();
+
+        $this->scenario
+            ->withAggregateId((string) $id)
+            ->given([new MarsRoverWasCreated($id, $name, $position, $orientation)])
+            ->when(new TurnRightMarsRover($id))
+            ->then([
+                new MarsRoverWasTurnedRight($id, Orientation::east()),
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_turns_left_a_mars_rover_when_orientation_is_north(): void
+    {
+        $id = new MarsRoverId('00000000-0000-0000-0000-000000000000');
+        $name = 'Dummy';
+        $position = Position::create(1, 1);
+        $orientation = Orientation::north();
+
+        $this->scenario
+            ->withAggregateId((string) $id)
+            ->given([new MarsRoverWasCreated($id, $name, $position, $orientation)])
+            ->when(new TurnLeftMarsRover($id))
+            ->then([
+                new MarsRoverWasTurnedLeft($id, Orientation::west()),
             ]);
     }
 }
