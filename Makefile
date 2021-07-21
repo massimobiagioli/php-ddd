@@ -5,7 +5,7 @@ start: composer-install-dev up
 restart: stop start
 
 up:
-	docker-compose up -d --remove-orphans php web
+	docker-compose up -d --remove-orphans php web mariadb
 
 stop:
 	docker-compose down -v
@@ -15,6 +15,9 @@ composer-install-dev:
 
 composer-require:
 	docker-compose run --rm --no-deps composer composer require $(dependency) --ignore-platform-reqs
+
+composer-dumpautoload:
+	docker-compose run --rm --no-deps composer composer dumpautoload
 
 composer-require-dev:
 	docker-compose run --rm --no-deps composer composer require --dev $(dependency) --ignore-platform-reqs

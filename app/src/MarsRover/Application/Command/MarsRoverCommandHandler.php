@@ -25,6 +25,7 @@ class MarsRoverCommandHandler extends SimpleCommandHandler
             $command->getPosition(),
             $command->getOrientation()
         );
+
         $this->repository->save($marsRover);
     }
 

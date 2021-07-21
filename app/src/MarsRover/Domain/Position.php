@@ -34,7 +34,7 @@ final class Position implements Serializable
         if ($offset > 0) {
             $this->x = ($this->x < self::MAX_X) ? $this->x + $offset : self::MAX_X;
         } elseif ($offset < 0) {
-            $this->x = ($this->x > 0) ? $this->x - $offset : 0;
+            $this->x = ($this->x > 0) ? $this->x - abs($offset) : 0;
         }
     }
 
@@ -43,7 +43,7 @@ final class Position implements Serializable
         if ($offset > 0) {
             $this->y = ($this->y < self::MAX_Y) ? $this->y + $offset : self::MAX_Y;
         } elseif ($offset < 0) {
-            $this->y = ($this->y > 0) ? $this->y - $offset : 0;
+            $this->y = ($this->y > 0) ? $this->y - abs($offset) : 0;
         }
     }
 

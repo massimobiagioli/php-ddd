@@ -20,6 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+            - '../src/MarsRover/Infrastructure/ReadModel/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    Broadway\CommandHandling\CommandBus: '@broadway.command_handling.command_bus'
+    Broadway\UuidGenerator\UuidGeneratorInterface: '@broadway.uuid.generator'
+    App\MarsRover\Infrastructure\ReadModel\DBALRepository: '@app.read_model.repository.rover'

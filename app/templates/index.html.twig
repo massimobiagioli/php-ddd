@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Mars Rover List
+{%  endblock %}
+
+{% block body %}
+    <div>
+        <div>
+            <h3>Create new Mars Rover</h3>
+            <form action="/create" method="post">
+                <div>
+                    <span>Name</span>
+                    <input type="string" name="name">
+                </div>
+                <div>
+                    <span>X</span>
+                    <input type="number" name="position_x">
+                </div>
+                <div>
+                    <span>Y</span>
+                    <input type="number" name="position_y">
+                </div>
+                <div>
+                    <span>Orientation</span>
+                    <select name="orientation">
+                        <option value="N">N</option>
+                        <option value="S">S</option>
+                        <option value="E">E</option>
+                        <option value="W">W</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" value="Ok">
+                </div>
+            </form>
+            <hr/>
+            <h3>Mars Rover List</h3>
+            <hr>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Orientation</th>
+                    <th>Odometer</th>
+                    <th>Swerves</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for mars_rover in mars_rovers %}
+                <tr>
+                    <td><a href="/detail/{{ mars_rover.id }}">{{ mars_rover.id }}</a></td>
+                    <td>{{ mars_rover.name }}</td>
+                    <td>({{ mars_rover.position.x }}, {{ mars_rover.position.y }})</td>
+                    <td>{{ mars_rover.orientation }}</td>
+                    <td>{{ mars_rover.stats.odometer }}</td>
+                    <td>{{ mars_rover.stats.swerves }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{%  endblock %}
+

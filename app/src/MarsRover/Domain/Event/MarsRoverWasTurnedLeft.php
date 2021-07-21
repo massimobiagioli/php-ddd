@@ -6,8 +6,9 @@ namespace App\MarsRover\Domain\Event;
 
 use App\MarsRover\Domain\MarsRoverId;
 use App\MarsRover\Domain\Orientation;
+use Broadway\Serializer\Serializable;
 
-final class MarsRoverWasTurnedLeft
+final class MarsRoverWasTurnedLeft implements Serializable
 {
     private MarsRoverId $id;
     private Orientation $newOrientation;
@@ -21,7 +22,8 @@ final class MarsRoverWasTurnedLeft
     public static function deserialize(array $data): self
     {
         return new self(
-            new MarsRoverId($data['id'], $data['newOrientation']),
+            new MarsRoverId($data['id']),
+            Orientation::fromString($data['newOrientation']),
         );
     }
 
@@ -29,7 +31,7 @@ final class MarsRoverWasTurnedLeft
     {
         return [
             'id' => (string) $this->getId(),
-            'newOrientation' => $this->newOrientation,
+            'newOrientation' => (string) $this->newOrientation,
         ];
     }
 

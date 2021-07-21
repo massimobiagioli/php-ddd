@@ -1,0 +1,37 @@
+services:
+    app.mars_rover.command_handler:
+        class: App\MarsRover\Application\Command\MarsRoverCommandHandler
+        arguments:
+            - '@app.mars_rover.repository'
+        tags:
+            - { name: broadway.command_handler }
+
+    app.mars_rover.repository:
+        class: App\MarsRover\Domain\MarsRoverRepository
+        arguments:
+            - '@broadway.event_store'
+            - '@broadway.event_handling.event_bus'
+            -
+                - '@broadway.metadata_enriching_event_stream_decorator'
+
+    app.read_model.repository.rover:
+        class: Broadway\ReadModel\ReadModel
+        public: true
+        factory: ['@app.read_model_repository_factory', create]
+        arguments:
+            - "app.read_model.rover"
+            - "App\\MarsRover\\Model\\ReadModel\\Rover"
+
+    app.read_model.projector.mars_rover:
+        class: App\MarsRover\Model\Projector\RoverProjector
+        arguments:
+            - '@app.read_model.repository.rover'
+        tags:
+            - { name: broadway.domain.event_listener }
+
+    app.read_model_repository_factory:
+        class: App\MarsRover\Infrastructure\ReadModel\DBALRepositoryFactory
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '@broadway.serializer.readmodel'
+            - "rovers"

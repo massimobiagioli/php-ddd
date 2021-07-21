@@ -7,8 +7,9 @@ namespace App\MarsRover\Domain\Event;
 use App\MarsRover\Domain\MarsRoverId;
 use App\MarsRover\Domain\Orientation;
 use App\MarsRover\Domain\Position;
+use Broadway\Serializer\Serializable;
 
-final class MarsRoverWasCreated
+final class MarsRoverWasCreated implements Serializable
 {
     private MarsRoverId $id;
     private string $name;
@@ -38,8 +39,8 @@ final class MarsRoverWasCreated
         return [
             'id' => (string) $this->getId(),
             'name' => $this->name,
-            'position' => $this->position,
-            'orientation' => $this->orientation,
+            'position' => $this->position->serialize(),
+            'orientation' => (string) $this->orientation,
         ];
     }
 

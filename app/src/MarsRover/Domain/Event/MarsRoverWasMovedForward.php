@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\MarsRover\Domain\Event;
 
 use App\MarsRover\Domain\MarsRoverId;
+use Broadway\Serializer\Serializable;
 
-final class MarsRoverWasMovedForward
+final class MarsRoverWasMovedForward implements Serializable
 {
     private MarsRoverId $id;
     private int $xOffset;
@@ -22,7 +23,9 @@ final class MarsRoverWasMovedForward
     public static function deserialize(array $data): self
     {
         return new self(
-            new MarsRoverId($data['id'], $data['xOffset'], $data['yOffset']),
+            new MarsRoverId($data['id']),
+            $data['xOffset'],
+            $data['yOffset'],
         );
     }
 
